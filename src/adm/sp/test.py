@@ -18,7 +18,7 @@ folder_url = "Shared%20Documents"  #folder url where to find
 folder_name = "ADM"  #folder name to find
 
 # Testing code
-# context_auth = AuthenticationContext(url='https://share.philips.com/sites/WiproDMCC-Immi')
+# context_auth = AuthenticationdlContext(url='https://share.philips.com/sites/WiproDMCC-Immi')
 # context_auth.acquire_token_for_app(client_id='b8f99341-7ebd-4bb3-af9e-5b8daa0d0618',
 #                                    client_secret='37U0DOjwtXY5fD9FSoMtaqx+a8rRPwOMmlBvGkyk+KI=')
 # ctx = ClientContext('https://share.philips.com/sites/WiproDMCC-Immi', context_auth)
@@ -29,6 +29,8 @@ folder_name = "ADM"  #folder name to find
 # ctx.execute_query()
 # if len(result) > 0:
 #     print("Folder has been found: {0}".format(result[0].properties["Name"]))
+# ctx.web.get_folder_by_server_relative_url(folder_url+"\\"+folder_name).folders.add("Test")
+# ctx.execute_query()
 
 for file in files:
     file_info = FileCreationInformation()
