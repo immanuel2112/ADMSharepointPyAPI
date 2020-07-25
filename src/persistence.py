@@ -143,7 +143,7 @@ class Persistence:
                             i += 1
                         target_report_segment_values.append(target_report_segment_value)
 
-                    target_report_value.target_report_segment_value = target_report_segment_values
+                    target_report_value.target_report_segment_values = target_report_segment_values
 
 
     # def test_connection(self) -> str:

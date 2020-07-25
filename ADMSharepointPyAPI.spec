@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['C:\\Users\\320027644\\MyCodebase\\ADMSharepointPyAPI\\src\\adm\\sp\\adm_sp.py'],
+a = Analysis(['C:\\Users\\320027644\\MyCodebase\\ADMSharepointPyAPI\\src\\adm_sp.py'],
              pathex=['C:\\Users\\320027644\\MyCodebase\\ADMSharepointPyAPI'],
              binaries=[],
              datas=[],

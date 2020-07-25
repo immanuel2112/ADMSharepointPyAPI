@@ -9,11 +9,29 @@ from office365.sharepoint.client_context import ClientContext
 from office365.sharepoint.file_creation_information import FileCreationInformation
 
 
+def __upload_file(files: list, path: str, ctx: ClientContext, segment_by_value: str = None) -> None:
+    for file in files:
+        file_info = FileCreationInformation()
+        with open(file, 'rb') as content_file:
+            file_info.content = content_file.read()
+
+        file_name = content_file.name
+
+        if segment_by_value is not None:
+            file_name = file_name.replace(".xlsx", "_"+segment_by_value + ".xlsx")
+
+        file_info.url = os.path.basename(path + '\\' + file_name)
+        file_info.overwrite = True
+        ctx.web.get_folder_by_server_relative_url(path).files.add(file_info)
+        ctx.execute_query()
+        content_file.close()
+
+
 def __create_folder_utility(ctx: ClientContext, folder_url: str, folder_name: str) -> str:
-    print("folder_url: "+folder_url)
-    print("folder_name: "+folder_name)
+    print("folder_url: " + folder_url)
+    print("folder_name: " + folder_name)
     folder_name_new = folder_name.replace("/", "")
-    print("New folder name: "+folder_name_new)
+    print("New folder name: " + folder_name_new)
 
     result = ctx.web.get_folder_by_server_relative_url(folder_url).folders.filter(
         "Name eq '{0}'".format(folder_name_new))
@@ -24,7 +42,7 @@ def __create_folder_utility(ctx: ClientContext, folder_url: str, folder_name: st
     else:
         ctx.web.get_folder_by_server_relative_url(folder_url).folders.add(folder_name_new)
         ctx.execute_query()
-        print("Folder created: " +folder_name_new)
+        print("Folder created: " + folder_name_new)
 
     new_path = folder_url + "\\" + folder_name_new
     print("New Path: " + new_path)
@@ -72,27 +90,22 @@ def __upload_target_reports(adm_sp_value: ADMSharepointValue) -> None:
     # Create folder structure
     new_path = __create_folder(ctx, adm_sp_value)
 
+    # Upload reports without segment by configuration
     if target_report_values is not None:
         for target_report_value in target_report_values:
             file_path = target_report_value.target_report_location
-            files = glob.glob(file_path)
+            if file_path is not None:
+                files = glob.glob(file_path)
+                __upload_file(files, new_path, ctx)
 
-            for file in files:
-                file_info = FileCreationInformation()
-                with open(file, 'rb') as content_file:
-                    file_info.content = content_file.read()
-
-                file_name = content_file.name
-                file_info.url = os.path.basename(new_path + '\\' + file_name)
-                file_info.overwrite = True
-                target_file = ctx.web.get_folder_by_server_relative_url(new_path).files.add(
-                    file_info)
-                ctx.execute_query()
-
-                target_file.set_property("Name", file_name)
-                ctx.execute_query()
-                # f.readlines()
-                content_file.close()
+            # Upload reports with segment by configuration
+            target_report_segment_values = target_report_value.target_report_segment_values
+            if target_report_segment_values is not None:
+                for target_report_segment_value in target_report_segment_values:
+                    segment_by_value = target_report_segment_value.target_report_segment_by_field_value
+                    segment_file_path = target_report_segment_value.target_report_segment_report_location
+                    segment_files = glob.glob(segment_file_path)
+                    __upload_file(segment_files, new_path, ctx, segment_by_value)
 
 
 def main():
