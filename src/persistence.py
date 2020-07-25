@@ -1,7 +1,8 @@
 import pypyodbc as pyodbc
 
-from adm.sp.adm_sp_models import ADMSharepointValue, SharepointValue, ADMTargetReportValue, ADMTargetReportSegmentValue
-from adm.sp import sql_constants
+from adm_sp_models import ADMSharepointValue, SharepointValue, ADMTargetReportValue, ADMTargetReportSegmentValue
+import sql_constants
+
 
 class Persistence:
     def __init__(self, adm_sp_value: ADMSharepointValue):

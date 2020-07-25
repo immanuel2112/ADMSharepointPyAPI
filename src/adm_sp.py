@@ -2,8 +2,8 @@ import sys
 import glob
 import os
 
-from adm.sp.adm_sp_models import ADMSharepointValue
-from adm.sp.persistence import Persistence
+from adm_sp_models import ADMSharepointValue
+from persistence import Persistence
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.client_context import ClientContext
 from office365.sharepoint.file_creation_information import FileCreationInformation
